@@ -1,0 +1,70 @@
+---
+- hosts: all
+  tasks:
+    - name: Create swift directory
+      file: path=~/swift state=directory owner=vagrant group=vagrant
+
+    - name: Install packages for swift
+      apt: pkg={{ item }} state=latest
+      with_items:
+        - clang-3.6
+        - libicu-dev
+      sudo: yes
+  
+    - name: Use clang 3.6
+      alternatives: name=clang link=/usr/bin/clang path=/usr/bin/clang-3.6
+      sudo: yes
+  
+    - name: Use clang++ 3.6
+      alternatives: name=clang++ link=/usr/bin/clang++ path=/usr/bin/clang++-3.6
+      sudo: yes
+  
+    - name: Grab gpg keys
+      shell: gpg --keyserver hkp://pool.sks-keyservers.net --recv-keys '7463 A81A 4B2E EA1B 551F  FBCF D441 C977 412B 37AD' '1BE1 E29A 084C B305 F397  D62A 9F59 7F4D 21A5 6D5F'
+      args:
+        chdir: /home/vagrant
+  
+    - name: Refresh gpg keys
+      shell: gpg --keyserver hkp://pool.sks-keyservers.net --refresh-keys Swift
+  
+    - name: Create swift directory
+      file: path=~/swift state=directory owner=vagrant group=vagrant
+  
+    - name: Download Swift snapshot
+      get_url: >
+        url=https://swift.org/builds/ubuntu1404/{{ swift_snapshot }}/{{ swift_snapshot }}-ubuntu14.04.tar.gz
+        dest=~/swift/swift-snapshot.tar.gz
+        mode=0444
+        owner=vagrant
+  
+    - name: Download Swift snapshot signature file
+      get_url: >
+        url=https://swift.org/builds/ubuntu1404/{{ swift_snapshot }}/{{ swift_snapshot }}-ubuntu14.04.tar.gz.sig
+        dest=~/swift/swift-snapshot.tar.gz.sig
+        mode=0444
+        owner=vagrant
+  
+    - name: Verify snapshot file
+      command: gpg --verify swift-snapshot.tar.gz.sig swift-snapshot.tar.gz
+      args:
+        chdir: ~/swift
+  
+    - name: Remove current version
+      shell: rm -rf usr
+      args:
+        chdir: ~/swift
+  
+    - name: Extract archive
+      shell: tar xzf swift-snapshot.tar.gz --strip-components 1
+      args:
+        chdir: ~/swift
+  
+    - name: Update bashrc
+      lineinfile:
+        dest=~/.bashrc
+        line='export PATH=~/swift/usr/bin:"${PATH}"'
+        regexp="^export PATH=~/swift/usr/bin"
+        owner=vagrant
+        state=present
+        insertafter=EOF
+        create=True

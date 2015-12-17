@@ -1,0 +1,17 @@
+---
+- hosts: all
+
+  vars:
+    swift_version:  "2.2"
+    swift_snapshot_date: "2015-12-10-a"
+    swift_snapshot: "swift-2.2-SNAPSHOT-2015-12-10-a"
+
+  tasks:
+    - name: Install useful packages
+      apt: pkg={{ item }} state=latest
+      with_items:
+        # - curl
+        - vim
+      sudo: yes
+
+  include: swift.yml
