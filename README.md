@@ -1,9 +1,7 @@
 # Vagrant development box for Swift
 
-Starting with ubuntu/trusty64 or ubuntu/wily64, this adds:
-    * Swift
-    * libdispatch
-
+Starting with ubuntu/trusty64 or ubuntu/wily64, this adds the Swift development
+environment along with libdispatch and a few other useful libraries.
 
 # Installation into your project
 
