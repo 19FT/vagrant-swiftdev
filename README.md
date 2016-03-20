@@ -1,16 +1,19 @@
 # Vagrant development box for Swift
 
-Starting with ubuntu/trusty64, this adds:
+Starting with ubuntu/trusty64 or ubuntu/wily64, this adds:
     * Swift
+    * libdispatch
 
 
 # Installation into your project
 
 1. Copy `Vagrantfile` and `vm-provisioning` folder into your project.
 2. Open `Vagrantfile` and change:
+    - the Ubunut base box to use (`config.vm.box`)
     - the IP address on `config.vm.network` if you need to.
     - the hostname (`config.vm.network`)
-3. Update the swift_snapshot in `vm-provisioning\init.yml`
+3. Update the `swift_seed_url_1404` & `swift_seed_url_1510` URLs in
+   `vm-provisioning\init.yml` to the latest.
 5. Add .vagrant to your project's `.gitignore` file.
 
 
@@ -26,4 +29,4 @@ Starting with ubuntu/trusty64, this adds:
 
        e.g
 
-          192.168.99.2 swiftdev.localhost
+          192.168.100.201 swiftdev.localhost

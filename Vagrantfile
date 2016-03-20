@@ -9,7 +9,7 @@ Vagrant.configure("2") do |c|
     #config.vm.box = "ubuntu/wily64"
 
     # Choose an IP address
-    config.vm.network "private_network", ip: "192.168.99.202"
+    config.vm.network "private_network", ip: "192.168.100.201"
 
     # Set hostname
     config.vm.hostname = "swiftdev.localhost"
