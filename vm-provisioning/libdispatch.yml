@@ -1,0 +1,33 @@
+---
+  - name: Install packages for building libdispatch
+    apt: pkg={{ item }} state=latest
+    with_items:
+      - autoconf
+      - libtool
+      - pkg-config
+      - systemtap-sdt-dev
+      - libblocksruntime-dev
+      - libkqueue-dev
+      - libpthread-workqueue-dev
+      - libbsd-dev
+    become: yes
+
+  - name: Remove current libdispatch version
+    file: path=swift-corelibs-libdispatch state=absent
+    become: yes
+
+
+  - name: Clone libdispatch
+    git: repo=https://github.com/apple/swift-corelibs-libdispatch dest=/home/vagrant/swift-corelibs-libdispatch
+
+  - name: Configure libdispatch
+    shell: sh ./autogen.sh && ./configure --with-swift-toolchain=/home/vagrant/swift/usr --prefix=/home/vagrant/swift/usr
+    args:
+      chdir: /home/vagrant/swift-corelibs-libdispatch
+      creates: /home/vagrant/swift-corelibs-libdispatch/Makefile
+
+  - name: Build libdispatch
+    shell: make && sudo make install
+    args:
+      chdir: /home/vagrant/swift-corelibs-libdispatch
+      creates: /home/vagrant/swift/usr/lib/swift/linux/x86_64/Dispatch.swiftmodule

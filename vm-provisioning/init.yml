@@ -2,16 +2,11 @@
 - hosts: all
 
   vars:
-    swift_version:  "2.2"
-    swift_snapshot_date: "2015-12-10-a"
-    swift_snapshot: "swift-2.2-SNAPSHOT-2015-12-10-a"
+    swift_seed_url_1404: "https://swift.org/builds/development/ubuntu1404/swift-DEVELOPMENT-SNAPSHOT-2016-03-16-a/swift-DEVELOPMENT-SNAPSHOT-2016-03-16-a-ubuntu14.04.tar.gz"
+    swift_seed_url_1510: "https://swift.org/builds/development/ubuntu1510/swift-DEVELOPMENT-SNAPSHOT-2016-03-16-a/swift-DEVELOPMENT-SNAPSHOT-2016-03-16-a-ubuntu15.10.tar.gz"
 
   tasks:
-    - name: Install useful packages
-      apt: pkg={{ item }} state=latest
-      with_items:
-        # - curl
-        - vim
-      sudo: yes
-
-  include: swift.yml
+  
+    - include: base.yml
+    - include: swift.yml
+    - include: libdispatch.yml

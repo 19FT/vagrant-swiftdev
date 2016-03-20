@@ -1,0 +1,22 @@
+---
+    - name: Install packages for swift (15.10)
+      apt: pkg={{ item }} state=latest
+      with_items:
+        - clang
+        - libicu-dev
+      become: yes
+
+    - name: Download Swift snapshot (15.10)
+      get_url: >
+        url={{ swift_seed_url_1510 }}
+        dest=~/swift/swift-snapshot.tar.gz
+        mode=0444
+        owner=vagrant
+  
+    - name: Download Swift snapshot signature file (15.10)
+      get_url: >
+        url={{ swift_seed_url_1510 }}.sig
+        dest=~/swift/swift-snapshot.tar.gz.sig
+        mode=0444
+        owner=vagrant
+  

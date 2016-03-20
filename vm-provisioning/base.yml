@@ -1,0 +1,29 @@
+---
+  - name: Install useful apps
+    apt: pkg={{ item }} state=latest
+    with_items:
+      - git
+      - vim
+      - autojump
+    become: yes
+
+  - name: Install useful libraries
+    apt: pkg={{ item }} state=latest
+    with_items:
+      - libjpeg-dev
+      - libb64-dev
+      - uuid-dev
+      - libcurl4-openssl-dev
+      - libhttp-parser-dev
+      - libhiredis-dev
+    become: yes
+
+  - name: Add autojump to bashrc
+    lineinfile:
+      dest=~/.bashrc
+      line='source /usr/share/autojump/autojump.bash'
+      regexp="^source /usr/share/autojump"
+      owner=vagrant
+      state=present
+      insertafter=EOF
+      create=True

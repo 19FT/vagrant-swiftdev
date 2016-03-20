@@ -1,0 +1,29 @@
+---
+    - name: Install packages for swift (14.04)
+      apt: pkg={{ item }} state=latest
+      with_items:
+        - clang-3.6
+        - libicu-dev
+      become: yes
+
+    - name: Use clang 3.6
+      alternatives: name=clang link=/usr/bin/clang path=/usr/bin/clang-3.6
+      become: yes
+  
+    - name: Use clang++ 3.6
+      alternatives: name=clang++ link=/usr/bin/clang++ path=/usr/bin/clang++-3.6
+      become: yes
+  
+    - name: Download Swift snapshot (14.04)
+      get_url: >
+        url={{ swift_seed_url_1404 }}
+        dest=~/swift/swift-snapshot.tar.gz
+        mode=0444
+        owner=vagrant
+  
+    - name: Download Swift snapshot signature file (14.04)
+      get_url: >
+        url={{ swift_seed_url_1404 }}.sig
+        dest=~/swift/swift-snapshot.tar.gz.sig
+        mode=0444
+        owner=vagrant
